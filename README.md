@@ -1,3 +1,4 @@
+<img src="./aa_img.png" alt="DEX 页面截图" width="700"/>
 # MinimalAccount: A Simple Account Abstraction Implementation
 
 This project provides a minimal implementation of an [ERC-4337]-style smart contract wallet using Account Abstraction. The contract supports signed user operations and allows execution of arbitrary calls through an `EntryPoint` contract.
