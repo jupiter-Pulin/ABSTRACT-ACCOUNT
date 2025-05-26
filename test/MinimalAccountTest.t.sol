@@ -118,6 +118,41 @@ contract MinimalAccountTest is Test {
             0
         );
         //ASSERT
-        assertEq(validationData, 1);
+        assertEq(validationData, 0);
+    }
+
+    function testExcuteAndValidateUserOp() public {
+        //ARRANGE
+        address dest = address(usdc);
+        uint256 value = 0;
+        bytes memory functionData = abi.encodeCall(
+            usdc.mint,
+            (address(minimalAccount), AMOUNT)
+        );
+        bytes memory excuteData = abi.encodeCall(
+            minimalAccount.execute,
+            (dest, value, functionData)
+        );
+        PackedUserOperation memory userOp = sendPackedUserOp
+            .generateSignedUserOperation(
+                address(minimalAccount),
+                excuteData,
+                helperConfig.getConfig()
+            );
+        PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
+        userOps[0] = userOp;
+        vm.deal(address(minimalAccount), 1 ether);//我们要让这个合约钱包有钱使得entrypoint能够用它支付gas
+        //ACT
+        vm.prank(address(1234567890));
+        IEntryPoint(helperConfig.getConfig().entryPoint).handleOps(
+            userOps,
+            payable(minimalAccount)
+        );
+        //ASSERT
+        assertEq(
+            usdc.balanceOf(address(minimalAccount)),
+            AMOUNT,
+            "USDC balance should be equal to AMOUNT"
+        );
     }
 }

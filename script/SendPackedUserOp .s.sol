@@ -22,7 +22,7 @@ contract SendPackedUserOp is Script {
         HelperConfig.NetworkConfig memory config
     ) public returns (PackedUserOperation memory) {
         //1.get the struct of PackedUserOperation
-        uint256 nonce = vm.getNonce(sender) - 1;
+        uint256 nonce = vm.getNonce(sender) - 1;//硬性规定，不-1会报错
         userOp = _generateSignedUserOperation(sender, callData, nonce);
         //give the signature of the userOp
 

@@ -134,7 +134,7 @@ contract HelperConfig is Script {
         localNetworkConfig = NetworkConfig({
             entryPoint: address(entryPoint),
             usdc: address(erc20Mock),
-            account: BURNER_WALLET
+            account: ANVIL_DEFAULT_ACCOUNT //注意，本地31337链的默认账户是Anvil的默认账户，签名不要搞成别人的
         });
         return localNetworkConfig;
     }
